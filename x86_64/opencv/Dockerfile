@@ -1,6 +1,6 @@
 ## Dockerfile to build opencv with python3 binding and with CUDA support
 
-FROM nvidia/cuda:9.1-cudnn7-devel
+FROM nvidia/cuda:9.0-cudnn7-devel
 
 # ARG https_proxy
 # ARG http_proxy
