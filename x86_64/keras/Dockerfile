@@ -8,24 +8,29 @@ FROM jkjung:opencv
 ARG DEBIAN_FRONTEND=noninteractive
 ENV KERAS_BACKEND=tensorflow
 
-RUN apt-get update && \
+# Do remember to download the 2 libcudnn deb files to ./cudnn/
+# before building this Docker image...
+COPY cudnn/libcudnn7_7.0.4.31-1+cuda9.0_amd64.deb /tmp
+COPY cudnn/libcudnn7-dev_7.0.4.31-1+cuda9.0_amd64.deb /tmp
+
+# TensorBoard
+EXPOSE 6006
+
+RUN dpkg -i /tmp/libcudnn7_7.0.4.31-1+cuda9.0_amd64.deb && \
+    dpkg -i /tmp/libcudnn7-dev_7.0.4.31-1+cuda9.0_amd64.deb && \
+    apt-get update && \
     apt-get install -y libhdf5-10 graphviz && \
-    apt-get install -y libopenblas-dev && \
+    apt-get install -y libopenblas-dev libzmq3-dev && \
+    apt-get install -y libcurl3-dev libfreetype6-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
-    pip3 --no-cache-dir install pandas scipy scikit-learn \
+    pip3 --no-cache-dir install pandas scipy sklearn scikit-learn \
                                 Pillow bcolz h5py pydot && \
     pip3 --no-cache-dir install --upgrade tensorflow-gpu && \
     pip3 --no-cache-dir install keras && \
-    pip3 --no-cache-dir install ipython ipykernel jupyter \
-                                jupyter-kernel-gateway \
-                                jupyter-tensorboard && \
-    python3 -m ipykernel.kernelspec && \
-    jupyter notebook --version && \
-    jupyter nbextension list 2>&1 && \
     #python3 -c "import numpy; print(numpy.__version__)" && \
-    #python3 -c "import tensorflow; print(tensorflow.__version__)" && \
     #MPLBACKEND=Agg python3 -c "import matplotlib.pyplot" && \
+    #python3 -c "import tensorflow; print(tensorflow.__version__)" && \
     rm -rf /tmp/* && \
-    dpkg-query -l > /dpkg-query-l.txt && \
-    pip3 freeze | tee /pip3-freeze.txt
+    dpkg-query -l && \
+    pip3 freeze

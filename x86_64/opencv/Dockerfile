@@ -1,18 +1,21 @@
 ## Dockerfile to build opencv with python3 binding and with CUDA support
 
-FROM nvidia/cuda:9.0-cudnn7-devel
+FROM nvidia/cuda:9.0-devel
 
 # ARG https_proxy
 # ARG http_proxy
+
+ARG DEBIAN_FRONTEND=noninteractive
 ARG OPENCV_VERSION=3.4.0
 ARG OPENCV_INSTALL_PATH=/usr/local
 
 RUN apt-get update && \
     apt-get purge -y python-numpy python3-numpy && \
-    apt-get install -y --only-upgrade g++-5 cpp-5 gcc-5 && \
     apt-get install -y apt-utils && \
-    apt-get install -y wget git unzip yasm pkg-config \
+    apt-get install -y --only-upgrade g++-5 cpp-5 gcc-5 && \
+    apt-get install -y wget curl rsync git zip unzip \
                        build-essential make cmake cmake-curses-gui \
+                       pkg-config vim yasm \
                        g++ libavformat-dev libavutil-dev \
                        libswscale-dev libv4l-dev libeigen3-dev \
                        libglew-dev libgtk2.0-dev \
