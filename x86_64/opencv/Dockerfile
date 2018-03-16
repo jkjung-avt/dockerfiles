@@ -9,7 +9,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG OPENCV_VERSION=3.4.0
 ARG OPENCV_INSTALL_PATH=/usr/local
 
-RUN apt-get update && \
+RUN ln -sf cuda-9.0 /usr/local/nvidia && \
+    apt-get update && \
     apt-get purge -y python-numpy python3-numpy && \
     apt-get install -y apt-utils && \
     apt-get install -y --only-upgrade g++-5 cpp-5 gcc-5 && \
