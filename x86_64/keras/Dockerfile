@@ -33,4 +33,7 @@ RUN dpkg -i /tmp/libcudnn7_7.0.4.31-1+cuda9.0_amd64.deb && \
     #python3 -c "import tensorflow; print(tensorflow.__version__)" && \
     rm -rf /tmp/* && \
     dpkg-query -l && \
-    pip3 freeze
+    pip3 freeze && \
+    echo "nohup tensorboard --logdir /mnt/logs 2>&1 &" > startup.sh
+
+#RUN /bin/bash startup.sh && sleep 4
