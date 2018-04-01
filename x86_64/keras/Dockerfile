@@ -25,7 +25,7 @@ RUN dpkg -i /tmp/libcudnn7_7.0.4.31-1+cuda9.0_amd64.deb && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     pip3 --no-cache-dir install pandas scipy sklearn scikit-learn \
-                                Pillow bcolz h5py pydot && \
+                                seaborn Pillow bcolz h5py pydot && \
     pip3 --no-cache-dir install --upgrade tensorflow-gpu && \
     pip3 --no-cache-dir install keras && \
     #python3 -c "import numpy; print(numpy.__version__)" && \
