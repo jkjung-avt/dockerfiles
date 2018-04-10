@@ -5,14 +5,19 @@ FROM nvidia/cuda:9.0-devel
 # ARG https_proxy
 # ARG http_proxy
 
-ARG DEBIAN_FRONTEND=noninteractive
+# UID (default 1000) should be passed from host when this image is built
+ARG UID=1000
 ARG OPENCV_VERSION=3.4.0
 ARG OPENCV_INSTALL_PATH=/usr/local
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 RUN ln -sf cuda-9.0 /usr/local/nvidia && \
     apt-get update && \
+    apt-get dist-upgrade -y && \
     apt-get purge -y python-numpy python3-numpy && \
     apt-get install -y apt-utils && \
+    apt-get install -y sudo && \
     apt-get install -y --only-upgrade g++-5 cpp-5 gcc-5 && \
     apt-get install -y wget curl rsync git zip unzip \
                        build-essential make cmake cmake-curses-gui \
@@ -56,3 +61,15 @@ RUN wget https://github.com/opencv/opencv/archive/$OPENCV_VERSION.zip && \
 
 ## Compress the opencv files so we can extract them from the container easily 
 # RUN tar cvzf opencv-$OPENCV_VERSION.tar.gz --directory=$OPENCV_INSTALL_PATH .
+
+# create the 'user' account (same uid as the person who created this
+# docker image)
+RUN useradd --create-home --uid "$UID" --user-group --groups video \
+            --shell /bin/bash user && \
+    ln -sf /bin/bash /bin/sh && \
+    chown -R user:user /home/user && \
+    echo "user:user" | chpasswd && \
+    adduser user sudo
+
+# run as 'user'
+USER user

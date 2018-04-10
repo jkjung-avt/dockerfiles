@@ -2,10 +2,12 @@
 
 FROM jkjung:opencv
 
+USER root
+
 # ARG https_proxy
 # ARG http_proxy
 
-ARG DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 ENV KERAS_BACKEND=tensorflow
 
 # Do remember to download the 2 libcudnn deb files to ./cudnn/
@@ -25,15 +27,19 @@ RUN dpkg -i /tmp/libcudnn7_7.0.4.31-1+cuda9.0_amd64.deb && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     pip3 --no-cache-dir install pandas scipy sklearn scikit-learn \
-                                seaborn Pillow bcolz h5py pydot && \
+                                seaborn sympy \
+                                Pillow bcolz h5py pydot && \
     pip3 --no-cache-dir install --upgrade tensorflow-gpu && \
     pip3 --no-cache-dir install keras && \
-    #python3 -c "import numpy; print(numpy.__version__)" && \
-    #MPLBACKEND=Agg python3 -c "import matplotlib.pyplot" && \
-    #python3 -c "import tensorflow; print(tensorflow.__version__)" && \
+    # python3 -c "import numpy; print(numpy.__version__)" && \
+    # MPLBACKEND=Agg python3 -c "import matplotlib.pyplot" && \
+    # python3 -c "import tensorflow; print(tensorflow.__version__)" && \
     rm -rf /tmp/* && \
     dpkg-query -l && \
     pip3 freeze && \
-    echo "nohup tensorboard --logdir /mnt/logs 2>&1 &" > startup.sh
+    echo "nohup tensorboard --logdir /mnt/logs 2>&1 &" > /startup.sh
 
-#RUN /bin/bash startup.sh && sleep 4
+# run as 'user'
+USER user
+
+# RUN /bin/bash startup.sh && sleep 4
