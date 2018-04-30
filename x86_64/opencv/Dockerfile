@@ -13,6 +13,9 @@ ARG OPENCV_INSTALL_PATH=/usr/local
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN ln -sf cuda-9.0 /usr/local/nvidia && \
+    echo 'Acquire::http::timeout "600";' > /etc/apt/apt.conf.d/99timeout && \
+    echo 'Acquire::ftp::timeout "600";' >> /etc/apt/apt.conf.d/99timeout && \
+    echo 'Acquire::Retries "10";' >> /etc/apt/apt.conf.d/99timeout && \
     apt-get update && \
     apt-get dist-upgrade -y && \
     apt-get purge -y python-numpy python3-numpy && \
@@ -35,7 +38,8 @@ RUN ln -sf cuda-9.0 /usr/local/nvidia && \
                        libatlas-base-dev gfortran \
                        qt5-default \
                        python3-dev python3-pip python3-tk && \
-    pip3 install -U pip && \
+    #pip3 install -U pip && \
+    curl https://bootstrap.pypa.io/get-pip.py | python3 && \
     pip3 install numpy matplotlib && \
     ## Cleanup
     apt-get clean && \
