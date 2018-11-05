@@ -28,6 +28,8 @@ RUN ln -sf cuda-9.0 /usr/local/nvidia && \
                        g++ libavformat-dev libavutil-dev \
                        libswscale-dev libv4l-dev \
                        libtbb-dev libeigen3-dev \
+                       libatlas-base-dev gfortran \
+                       libopenblas-dev liblapacke-dev checkinstall \
                        libglew-dev libgtk2.0-dev \
                        libdc1394-22-dev libxine2-dev \
                        libgstreamer1.0-dev \
@@ -36,7 +38,6 @@ RUN ln -sf cuda-9.0 /usr/local/nvidia && \
                        libjasper-dev libpng12-dev libavcodec-dev \
                        zlib1g-dev  \
                        libxvidcore-dev libx264-dev libgtk-3-dev \
-                       libatlas-base-dev gfortran \
                        qt5-default \
                        python3-dev python3-pip python3-tk && \
     # pip3 install -U pip && \
@@ -56,6 +57,7 @@ RUN wget https://github.com/opencv/opencv/archive/$OPENCV_VERSION.zip && \
     cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local \
           -D WITH_CUDA=ON -D CUDA_ARCH_BIN="6.1" -D CUDA_ARCH_PTX="" \
           -D WITH_CUBLAS=ON -D ENABLE_FAST_MATH=ON -D CUDA_FAST_MATH=ON \
+          -D BUILD_opencv_cudacodec=OFF \
           -D WITH_TBB=ON -D WITH_EIGEN=ON \
           -D WITH_LIBV4L=ON -D BUILD_TESTS=OFF \
           -D BUILD_PERF_TESTS=OFF -D BUILD_EXAMPLES=OFF \
