@@ -26,7 +26,8 @@ RUN ln -sf cuda-9.0 /usr/local/nvidia && \
                        build-essential make cmake cmake-curses-gui \
                        pkg-config vim yasm \
                        g++ libavformat-dev libavutil-dev \
-                       libswscale-dev libv4l-dev libeigen3-dev \
+                       libswscale-dev libv4l-dev \
+                       libtbb-dev libeigen3-dev \
                        libglew-dev libgtk2.0-dev \
                        libdc1394-22-dev libxine2-dev \
                        libgstreamer1.0-dev \
@@ -38,7 +39,7 @@ RUN ln -sf cuda-9.0 /usr/local/nvidia && \
                        libatlas-base-dev gfortran \
                        qt5-default \
                        python3-dev python3-pip python3-tk && \
-    #pip3 install -U pip && \
+    # pip3 install -U pip && \
     curl https://bootstrap.pypa.io/get-pip.py | python3 && \
     pip3 install numpy matplotlib && \
     ## Cleanup
@@ -55,6 +56,7 @@ RUN wget https://github.com/opencv/opencv/archive/$OPENCV_VERSION.zip && \
     cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local \
           -D WITH_CUDA=ON -D CUDA_ARCH_BIN="6.1" -D CUDA_ARCH_PTX="" \
           -D WITH_CUBLAS=ON -D ENABLE_FAST_MATH=ON -D CUDA_FAST_MATH=ON \
+          -D WITH_TBB=ON -D WITH_EIGEN=ON \
           -D WITH_LIBV4L=ON -D BUILD_TESTS=OFF \
           -D BUILD_PERF_TESTS=OFF -D BUILD_EXAMPLES=OFF \
           -D BUILD_opencv_python2=OFF -D BUILD_opencv_python3=ON \
